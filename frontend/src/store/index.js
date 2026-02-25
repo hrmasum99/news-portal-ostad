@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Auth Store
 export const useAuthStore = create(
   persist(
     (set, get) => ({
@@ -35,7 +34,6 @@ export const useAuthStore = create(
   )
 );
 
-// News Store
 export const useNewsStore = create((set, get) => ({
   news: [],
   topNews: [],
@@ -81,7 +79,6 @@ export const useNewsStore = create((set, get) => ({
   },
 }));
 
-// UI Store
 export const useUIStore = create((set) => ({
   isMobileMenuOpen: false,
   theme: 'light',

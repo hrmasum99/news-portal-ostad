@@ -11,9 +11,9 @@ import {
   FaSave,
   FaTimes,
 } from 'react-icons/fa';
-import { useAuthStore, useNewsStore } from '../../store'; // Fixed path
-import { authAPI, newsAPI, formatDate } from '../../services/api'; // Fixed path
-import Loading from '../common/Loading'; // Fixed path
+import { useAuthStore, useNewsStore } from '../../store'; 
+import { authAPI, newsAPI, formatDate } from '../../services/api'; 
+import Loading from '../common/Loading'; 
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -25,10 +25,10 @@ const Profile = () => {
     name: '',
     email: '',
     bio: '',
+    avatar: '',
   });
 
   useEffect(() => {
-    // 🚨 SAFETY CHECK: If no user exists, clear broken state and force login
     if (!isAuthenticated || !user) {
       logout();
       navigate('/login');
@@ -47,6 +47,7 @@ const Profile = () => {
           name: user.name,
           email: user.email,
           bio: user.bio || '',
+          avatar: user.avatar || '',
         });
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -93,7 +94,6 @@ const Profile = () => {
     }
   };
 
-  // 🚨 PREVENT RENDER CRASH: Show loading if user is null before redirect happens
   if (loading || !user) return <Loading fullScreen />;
 
   const totalViews = userNews.reduce((sum, news) => sum + news.views, 0);
@@ -102,22 +102,19 @@ const Profile = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-b from-dark-50 to-white">
       <div className="container-custom max-w-6xl">
-        {/* Profile Header */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 animate-fade-in">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-            {/* Avatar */}
             <div className="relative">
               <img
-                src={user.avatar}
+                src={editMode && formData.avatar ? formData.avatar : user.avatar}
                 alt={user.name}
                 className="w-32 h-32 rounded-full border-4 border-primary-500 object-cover"
               />
-              <button className="absolute bottom-0 right-0 bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-full shadow-lg transition-colors">
+              <button onClick={() => setEditMode(true)} className="absolute bottom-0 right-0 bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-full shadow-lg transition-colors cursor-pointer">
                 <FaEdit />
               </button>
             </div>
 
-            {/* User Info */}
             <div className="flex-1">
               {!editMode ? (
                 <>
@@ -138,6 +135,17 @@ const Profile = () => {
                 </>
               ) : (
                 <form onSubmit={handleUpdateProfile} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-dark-700 mb-1">Profile Image URL</label>
+                    <input
+                      type="url"
+                      name="avatar"
+                      value={formData.avatar}
+                      onChange={handleChange}
+                      className="input-field"
+                      placeholder="https://example.com/my-image.jpg"
+                    />
+                  </div>
                   <div>
                     <input
                       type="text"
@@ -181,6 +189,7 @@ const Profile = () => {
                           name: user.name,
                           email: user.email,
                           bio: user.bio || '',
+                          avatar: user.avatar || '',
                         });
                       }}
                       className="btn-secondary flex items-center space-x-2"
@@ -193,7 +202,6 @@ const Profile = () => {
               )}
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-6 bg-dark-50 rounded-xl p-6">
               <div className="text-center">
                 <p className="text-3xl font-bold text-primary-600">{userNews.length}</p>
@@ -211,7 +219,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-display font-bold text-dark-900">My Articles</h2>
           <Link to="/profile/create-news" className="btn-primary flex items-center space-x-2">
@@ -220,12 +227,11 @@ const Profile = () => {
           </Link>
         </div>
 
-        {/* User's News Grid */}
         {userNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userNews.map((news) => (
               <div key={news._id} className="card group">
-                {/* Image */}
+
                 <div className="relative overflow-hidden h-48">
                   <img
                     src={news.image}
@@ -253,7 +259,6 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="p-6">
                   <Link
                     to={`/news/${news._id}`}

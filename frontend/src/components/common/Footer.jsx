@@ -46,9 +46,7 @@ const Footer = () => {
   return (
     <footer className="bg-dark-900 text-dark-100 pt-16 pb-8 mt-20">
       <div className="container-custom">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Brand Section */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2 group">
               <FaNewspaper className="text-3xl text-primary-500" />
@@ -75,7 +73,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Company Links */}
           <div>
             <h3 className="text-white font-display font-bold text-lg mb-4">Company</h3>
             <ul className="space-y-2">
@@ -92,7 +89,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Content Links */}
           <div>
             <h3 className="text-white font-display font-bold text-lg mb-4">Content</h3>
             <ul className="space-y-2">
@@ -109,7 +105,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div>
             <h3 className="text-white font-display font-bold text-lg mb-4">Contact Us</h3>
             <ul className="space-y-3">
@@ -141,7 +136,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Newsletter Section */}
         <div className="border-t border-dark-800 pt-8 mb-8">
           <div className="max-w-2xl mx-auto text-center">
             <h3 className="text-white font-display font-bold text-2xl mb-3">
@@ -166,7 +160,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Footer */}
         <div className="border-t border-dark-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-dark-400 text-sm">

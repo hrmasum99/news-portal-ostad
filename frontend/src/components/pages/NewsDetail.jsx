@@ -35,7 +35,6 @@ const NewsDetail = () => {
         const response = await newsAPI.getNewsById(id);
         if (response.success) {
           setNews(response.data);
-          // Fetch related news from same category
           const allNewsRes = await newsAPI.getNewsByCategory(response.data.category);
           if (allNewsRes.success) {
             const related = allNewsRes.data
@@ -64,7 +63,6 @@ const NewsDetail = () => {
       return;
     }
     setLiked(!liked);
-    // In real app, this would call API to update likes
   };
 
   const handleDelete = async () => {
@@ -94,7 +92,6 @@ const NewsDetail = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-12 bg-white">
-      {/* Back Button */}
       <div className="container-custom mb-8">
         <button
           onClick={() => navigate(-1)}
@@ -105,9 +102,7 @@ const NewsDetail = () => {
         </button>
       </div>
 
-      {/* Article Header */}
       <article className="container-custom max-w-4xl">
-        {/* Category & Edit/Delete */}
         <div className="flex items-center justify-between mb-6">
           <Link
             to={`/news?category=${news.category}`}
@@ -136,12 +131,10 @@ const NewsDetail = () => {
           )}
         </div>
 
-        {/* Title */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-dark-900 mb-6 leading-tight animate-slide-up">
           {news.title}
         </h1>
 
-        {/* Meta Information */}
         <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-dark-200 mb-8 animate-slide-up animation-delay-200">
           <div className="flex items-center space-x-3">
             <img
@@ -170,7 +163,6 @@ const NewsDetail = () => {
           </div>
         </div>
 
-        {/* Featured Image */}
         <div className="relative w-full h-96 md:h-[500px] rounded-2xl overflow-hidden mb-12 animate-scale-in">
           <img
             src={news.image}
@@ -179,7 +171,6 @@ const NewsDetail = () => {
           />
         </div>
 
-        {/* Article Content */}
         <div className="prose prose-lg max-w-none mb-12">
           {news.content.split('\n\n').map((paragraph, index) => (
             <p key={index} className="text-dark-700 leading-relaxed mb-6 text-lg">
@@ -188,7 +179,6 @@ const NewsDetail = () => {
           ))}
         </div>
 
-        {/* Tags */}
         {news.tags && news.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             {news.tags.map((tag) => (
@@ -202,7 +192,6 @@ const NewsDetail = () => {
           </div>
         )}
 
-        {/* Interaction Buttons */}
         <div className="flex items-center justify-between py-8 border-y border-dark-200">
           <button
             onClick={handleLike}
@@ -257,7 +246,6 @@ const NewsDetail = () => {
         </div>
       </article>
 
-      {/* Related News */}
       {relatedNews.length > 0 && (
         <section className="container-custom mt-20">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-dark-900 mb-8">

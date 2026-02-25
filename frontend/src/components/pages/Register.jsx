@@ -30,7 +30,6 @@ const Register = () => {
     e.preventDefault();
     setError('');
 
-    // Validation
     if (!formData.name || !formData.email || !formData.password) {
       setError('Please fill in all required fields');
       return;

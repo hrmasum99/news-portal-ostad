@@ -3,8 +3,24 @@ const slugify = require('slugify');
 
 exports.getAllNews = async (req, res) => {
   try {
-    const news = await News.find({ published: true }).populate('author', 'name avatar').sort('-createdAt');
-    res.json({ success: true, data: news });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12; 
+    const startIndex = (page - 1) * limit;
+
+    const total = await News.countDocuments({ published: true });
+    const news = await News.find({ published: true })
+      .populate('author', 'name avatar')
+      .sort('-createdAt')
+      .skip(startIndex)
+      .limit(limit);
+
+    res.json({ 
+      success: true, 
+      data: { 
+        news, 
+        pagination: { total, page, pages: Math.ceil(total / limit) } 
+      } 
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -23,9 +39,24 @@ exports.getTopNews = async (req, res) => {
 
 exports.getNewsById = async (req, res) => {
   try {
-    const news = await News.findById(req.params.id).populate('author', 'name avatar bio');
-    if (!news) return res.status(404).json({ success: false, message: 'News not found' });
-    res.json({ success: true, data: news });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const startIndex = (page - 1) * limit;
+
+    const total = await News.countDocuments({ category: req.params.category, published: true });
+    const news = await News.find({ category: req.params.category, published: true })
+      .populate('author', 'name avatar')
+      .sort('-createdAt')
+      .skip(startIndex)
+      .limit(limit);
+
+    res.json({ 
+      success: true, 
+      data: { 
+        news, 
+        pagination: { total, page, pages: Math.ceil(total / limit) } 
+      } 
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -119,9 +150,9 @@ exports.likeNews = async (req, res) => {
 
     const index = news.likes.indexOf(req.user._id);
     if (index === -1) {
-      news.likes.push(req.user._id); // Like
+      news.likes.push(req.user._id);
     } else {
-      news.likes.splice(index, 1); // Unlike
+      news.likes.splice(index, 1); 
     }
 
     await news.save();

@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// Base URL from environment variable
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-// Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -11,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
     const authStorage = localStorage.getItem('auth-storage');
@@ -28,7 +25,6 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -40,15 +36,11 @@ api.interceptors.response.use(
   }
 );
 
-// ============================================
-// AUTHENTICATION API EXAMPLES
-// ============================================
-
 export const authAPI = {
   login: async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
-      return response.data; // Backend already sends { success: true, data: {...} }
+      return response.data; 
     } catch (error) {
       return { success: false, message: error.response?.data?.message || 'Login failed' };
     }
@@ -82,14 +74,11 @@ export const authAPI = {
   },
 };
 
-// ============================================
-// NEWS API EXAMPLES
-// ============================================
 
 export const newsAPI = {
-  getAllNews: async () => {
+  getAllNews: async (page = 1, limit = 12) => {
     try {
-      const response = await api.get('/news');
+      const response = await api.get(`/news?page=${page}&limit=${limit}`);
       return response.data; 
     } catch (error) {
       return { success: false, message: error.response?.data?.message || 'Failed to fetch news' };
@@ -114,9 +103,10 @@ export const newsAPI = {
     }
   },
 
-  getNewsByCategory: async (category) => {
+  getNewsByCategory: async (category, page = 1, limit = 12) => {
     try {
-      const url = category === 'All' ? '/news' : `/news/category/${category}`;
+      const url = category === 'All' ? `/news?page=${page}&limit=${limit}` 
+        : `/news/category/${category}?page=${page}&limit=${limit}`;
       const response = await api.get(url);
       return response.data;
     } catch (error) {
@@ -179,10 +169,6 @@ export const newsAPI = {
   },
 };
 
-// ============================================
-// CONTACT API EXAMPLE
-// ============================================
-
 export const contactAPI = {
   submitContact: async (contactData) => {
     try {
@@ -193,10 +179,6 @@ export const contactAPI = {
     }
   },
 };
-
-// ============================================
-// HELPER FUNCTIONS (Required by UI Components)
-// ============================================
 
 export const formatDate = (date) => {
   if (!date) return '';

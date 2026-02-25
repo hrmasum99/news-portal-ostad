@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaArrowRight, FaFire, FaChartLine, FaNewspaper } from 'react-icons/fa';
-import { useNewsStore } from '../../store'; 
-import { newsAPI } from '../../services/api'; 
-import NewsCard from '../common/NewsCard'; 
-import Loading from '../common/Loading'; 
+import { FaArrowRight, FaFire, FaChartLine, FaNewspaper, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useAuthStore, useNewsStore } from "../../store";
+import { newsAPI } from '../../services/api';
+import NewsCard from '../common/NewsCard';
+import Loading from '../common/Loading';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
+  const [latestNewsPage, setLatestNewsPage] = useState(1);
+  const [latestNewsTotalPages, setLatestNewsTotalPages] = useState(1);
+  const [latestNewsData, setLatestNewsData] = useState([]);
   const { topNews, news, categories, setTopNews, setNews } = useNewsStore();
 
   useEffect(() => {
@@ -16,11 +19,26 @@ const Home = () => {
         setLoading(true);
         const [topNewsRes, allNewsRes] = await Promise.all([
           newsAPI.getTopNews(6),
-          newsAPI.getAllNews(),
+          newsAPI.getAllNews(1, 6), // First page, 6 items for latest news
         ]);
 
-        if (topNewsRes.success) setTopNews(topNewsRes.data);
-        if (allNewsRes.success) setNews(allNewsRes.data);
+        if (topNewsRes.success) {
+          const topNewsArray = topNewsRes.data.news || topNewsRes.data;
+          setTopNews(topNewsArray);
+        }
+        
+        if (allNewsRes.success) {
+          const newsArray = allNewsRes.data.news || allNewsRes.data;
+          setNews(newsArray);
+          setLatestNewsData(newsArray);
+          
+          // Handle pagination data
+          if (allNewsRes.data.pagination) {
+            setLatestNewsTotalPages(allNewsRes.data.pagination.pages);
+          } else {
+            setLatestNewsTotalPages(1);
+          }
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -31,12 +49,54 @@ const Home = () => {
     fetchData();
   }, [setTopNews, setNews]);
 
+  // Fetch latest news when page changes
+  useEffect(() => {
+    const fetchLatestNews = async () => {
+      try {
+        const response = await newsAPI.getAllNews(latestNewsPage, 6);
+        if (response.success) {
+          const newsArray = response.data.news || response.data;
+          setLatestNewsData(newsArray);
+          
+          // Handle pagination data
+          if (response.data.pagination) {
+            setLatestNewsTotalPages(response.data.pagination.pages);
+          }
+          
+          window.scrollTo({ top: document.getElementById('latest-news-section')?.offsetTop - 100, behavior: 'smooth' });
+        }
+      } catch (error) {
+        console.error('Error fetching latest news:', error);
+      }
+    };
+
+    if (latestNewsPage > 1) {
+      fetchLatestNews();
+    }
+  }, [latestNewsPage]);
+
   if (loading) return <Loading fullScreen />;
 
   const heroNews = topNews[0];
   const featuredNews = topNews.slice(1, 4);
-  const latestNews = news.slice(0, 6);
+  const latestNews = latestNewsData;
   const trendingNews = news.filter(n => n.views > 2000).slice(0, 4);
+
+  const handleLatestNewsPageChange = (page) => {
+    setLatestNewsPage(page);
+  };
+
+  const handleLatestNewsPrev = () => {
+    if (latestNewsPage > 1) {
+      setLatestNewsPage(latestNewsPage - 1);
+    }
+  };
+
+  const handleLatestNewsNext = () => {
+    if (latestNewsPage < latestNewsTotalPages) {
+      setLatestNewsPage(latestNewsPage + 1);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -154,7 +214,7 @@ const Home = () => {
       </section>
 
       {/* Latest News Section */}
-      <section className="py-20 bg-white">
+      <section id="latest-news-section" className="py-20 bg-white">
         <div className="container-custom">
           <div className="flex items-center justify-between mb-12">
             <div>
@@ -173,6 +233,43 @@ const Home = () => {
               <NewsCard key={newsItem._id} news={newsItem} />
             ))}
           </div>
+
+          {/* Pagination for Latest News */}
+          {latestNewsTotalPages > 1 && (
+            <div className="mt-12 flex justify-center items-center space-x-4">
+              <button
+                onClick={handleLatestNewsPrev}
+                disabled={latestNewsPage === 1}
+                className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2 ${
+                  latestNewsPage === 1
+                    ? 'bg-dark-100 text-dark-400 cursor-not-allowed'
+                    : 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <FaChevronLeft />
+                <span className="hidden sm:inline">Previous</span>
+              </button>
+
+              <div className="flex items-center space-x-2">
+                <span className="px-4 py-2 bg-dark-100 rounded-lg font-medium text-dark-700">
+                  Page {latestNewsPage} of {latestNewsTotalPages}
+                </span>
+              </div>
+
+              <button
+                onClick={handleLatestNewsNext}
+                disabled={latestNewsPage === latestNewsTotalPages}
+                className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2 ${
+                  latestNewsPage === latestNewsTotalPages
+                    ? 'bg-dark-100 text-dark-400 cursor-not-allowed'
+                    : 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <span className="hidden sm:inline">Next</span>
+                <FaChevronRight />
+              </button>
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link to="/news" className="btn-primary text-lg px-8 py-4 inline-flex items-center space-x-2">

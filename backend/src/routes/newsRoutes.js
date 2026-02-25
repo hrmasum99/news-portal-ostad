@@ -13,6 +13,6 @@ router.post('/', protect, createNews);
 router.put('/:id', protect, updateNews);
 router.delete('/:id', protect, deleteNews);
 router.post('/:id/like', protect, likeNews);
-router.post('/:id/view', incrementView); // View doesn't need protection
+router.post('/:id/view', incrementView); 
 
 module.exports = router;

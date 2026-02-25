@@ -34,7 +34,6 @@ const CreateEditNews = () => {
           const response = await newsAPI.getNewsById(id);
           if (response.success) {
             const news = response.data;
-            // Check if user is the author
             if (news.author._id !== user._id) {
               alert('You can only edit your own news');
               navigate('/profile');
@@ -70,7 +69,6 @@ const CreateEditNews = () => {
     e.preventDefault();
     setError('');
 
-    // Validation
     if (!formData.title || !formData.excerpt || !formData.content || !formData.image) {
       setError('Please fill in all required fields');
       return;
@@ -113,7 +111,6 @@ const CreateEditNews = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-b from-dark-50 to-white">
       <div className="container-custom max-w-4xl">
-        {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate('/profile')}
@@ -130,7 +127,6 @@ const CreateEditNews = () => {
           </p>
         </div>
 
-        {/* Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {error && (
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
@@ -139,7 +135,6 @@ const CreateEditNews = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
             <div>
               <label htmlFor="title" className="block text-sm font-semibold text-dark-700 mb-2">
                 Title *
@@ -156,7 +151,6 @@ const CreateEditNews = () => {
               />
             </div>
 
-            {/* Category & Tags Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="category" className="block text-sm font-semibold text-dark-700 mb-2">
@@ -194,7 +188,6 @@ const CreateEditNews = () => {
               </div>
             </div>
 
-            {/* Image URL */}
             <div>
               <label htmlFor="image" className="block text-sm font-semibold text-dark-700 mb-2">
                 Featured Image URL *
@@ -226,7 +219,6 @@ const CreateEditNews = () => {
               )}
             </div>
 
-            {/* Excerpt */}
             <div>
               <label htmlFor="excerpt" className="block text-sm font-semibold text-dark-700 mb-2">
                 Excerpt *
@@ -244,7 +236,6 @@ const CreateEditNews = () => {
               <p className="mt-1 text-xs text-dark-500">{formData.excerpt.length} characters</p>
             </div>
 
-            {/* Content */}
             <div>
               <label htmlFor="content" className="block text-sm font-semibold text-dark-700 mb-2">
                 Content *
@@ -264,7 +255,6 @@ const CreateEditNews = () => {
               </p>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <button
                 type="submit"

@@ -93,7 +93,6 @@ const Contact = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-b from-dark-50 to-white">
       <div className="container-custom">
-        {/* Page Header */}
         <div className="text-center mb-16 animate-fade-in">
           <h1 className="text-5xl md:text-6xl font-display font-bold text-dark-900 mb-4">
             Get In Touch
@@ -104,7 +103,6 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-          {/* Contact Form */}
           <div className="lg:col-span-3 animate-slide-up">
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <h2 className="text-3xl font-display font-bold text-dark-900 mb-6">
@@ -204,9 +202,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Information */}
           <div className="lg:col-span-2 space-y-8 animate-slide-up animation-delay-200">
-            {/* Contact Info Cards */}
             <div className="space-y-4">
               {contactInfo.map((info, index) => (
                 <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
@@ -232,7 +228,6 @@ const Contact = () => {
               ))}
             </div>
 
-            {/* Social Media */}
             <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-display font-bold mb-4">Follow Us</h3>
               <p className="mb-6 text-primary-100">
@@ -254,7 +249,6 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Office Hours */}
             <div className="bg-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-display font-bold text-dark-900 mb-4">Office Hours</h3>
               <div className="space-y-3 text-dark-700">
@@ -275,7 +269,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Map Section (Placeholder) */}
         <div className="mt-16 animate-fade-in">
           <div className="bg-dark-100 rounded-2xl overflow-hidden h-96 flex items-center justify-center">
             <div className="text-center">
