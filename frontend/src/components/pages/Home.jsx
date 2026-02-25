@@ -32,7 +32,6 @@ const Home = () => {
           setNews(newsArray);
           setLatestNewsData(newsArray);
           
-          // Handle pagination data
           if (allNewsRes.data.pagination) {
             setLatestNewsTotalPages(allNewsRes.data.pagination.pages);
           } else {
@@ -49,7 +48,6 @@ const Home = () => {
     fetchData();
   }, [setTopNews, setNews]);
 
-  // Fetch latest news when page changes
   useEffect(() => {
     const fetchLatestNews = async () => {
       try {
@@ -58,7 +56,6 @@ const Home = () => {
           const newsArray = response.data.news || response.data;
           setLatestNewsData(newsArray);
           
-          // Handle pagination data
           if (response.data.pagination) {
             setLatestNewsTotalPages(response.data.pagination.pages);
           }
@@ -100,9 +97,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background */}
         <div className="absolute inset-0 z-0">
           <img
             src={heroNews?.image}
@@ -112,7 +107,6 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-dark-900/70 via-dark-900/50 to-white"></div>
         </div>
 
-        {/* Content */}
         <div className="container-custom relative z-10 text-center animate-fade-in">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-display font-black text-white mb-6 leading-tight animate-slide-up">
@@ -132,7 +126,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-3 bg-white/70 rounded-full"></div>
@@ -140,7 +133,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Top News Section */}
       <section className="py-20 bg-white">
         <div className="container-custom">
           <div className="flex items-center justify-between mb-12">
@@ -164,7 +156,6 @@ const Home = () => {
             </Link>
           </div>
 
-          {/* Perfect 3x2 Symmetrical Grid (All 6 items same size) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {topNews.slice(0, 6).map((newsItem) => (
               <NewsCard key={newsItem._id} news={newsItem} />
@@ -204,7 +195,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Latest News Section */}
       <section id="latest-news-section" className="py-20 bg-white">
         <div className="container-custom">
           <div className="flex items-center justify-between mb-12">
@@ -234,7 +224,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Trending Section */}
       <section className="py-20 bg-gradient-to-b from-dark-50 to-white">
         <div className="container-custom">
           <div className="flex items-center space-x-3 mb-12">
@@ -278,7 +267,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary-600 to-primary-700 text-white">
         <div className="container-custom text-center">
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">

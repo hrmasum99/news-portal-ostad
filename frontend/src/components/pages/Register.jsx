@@ -71,7 +71,6 @@ const Register = () => {
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-br from-primary-50 via-white to-dark-50">
       <div className="container-custom">
         <div className="max-w-md mx-auto">
-          {/* Logo & Title */}
           <div className="text-center mb-8 animate-fade-in">
             <Link to="/" className="inline-flex items-center space-x-2 mb-6">
               <FaNewspaper className="text-4xl text-primary-600" />
@@ -85,7 +84,6 @@ const Register = () => {
             <p className="text-dark-600">Join our community of news readers and writers</p>
           </div>
 
-          {/* Register Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8 animate-slide-up">
             {error && (
               <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 animate-slide-down">
@@ -94,7 +92,6 @@ const Register = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Input */}
               <div>
                 <label htmlFor="name" className="block text-sm font-semibold text-dark-700 mb-2">
                   Full Name *
@@ -114,7 +111,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Email Input */}
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-dark-700 mb-2">
                   Email Address *
@@ -134,7 +130,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Password Input */}
               <div>
                 <label htmlFor="password" className="block text-sm font-semibold text-dark-700 mb-2">
                   Password *
@@ -155,7 +150,6 @@ const Register = () => {
                 <p className="mt-1 text-xs text-dark-500">Must be at least 6 characters</p>
               </div>
 
-              {/* Confirm Password Input */}
               <div>
                 <label
                   htmlFor="confirmPassword"
@@ -178,7 +172,6 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Bio Input */}
               <div>
                 <label htmlFor="bio" className="block text-sm font-semibold text-dark-700 mb-2">
                   Bio (Optional)
@@ -194,7 +187,6 @@ const Register = () => {
                 />
               </div>
 
-              {/* Terms Checkbox */}
               <div>
                 <label className="flex items-start space-x-2 cursor-pointer">
                   <input
@@ -215,7 +207,6 @@ const Register = () => {
                 </label>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -225,7 +216,6 @@ const Register = () => {
               </button>
             </form>
 
-            {/* Divider */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-dark-200"></div>
@@ -235,7 +225,6 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Social Sign Up */}
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-dark-200 rounded-lg hover:bg-dark-50 transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -266,7 +255,6 @@ const Register = () => {
               </button>
             </div>
 
-            {/* Sign In Link */}
             <p className="mt-8 text-center text-dark-600">
               Already have an account?{' '}
               <Link to="/login" className="text-primary-600 hover:text-primary-700 font-semibold">

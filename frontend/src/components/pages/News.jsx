@@ -18,12 +18,11 @@ const News = () => {
 
   const { news, categories, selectedCategory, setNews, setSelectedCategory } = useNewsStore();
 
-  // Get category from URL params
   const urlCategory = searchParams.get('category') || 'All';
 
   useEffect(() => {
     setSelectedCategory(urlCategory);
-    setCurrentPage(1); // Reset to page 1 when category changes
+    setCurrentPage(1); 
   }, [urlCategory, setSelectedCategory]);
 
   useEffect(() => {
@@ -32,19 +31,19 @@ const News = () => {
         setLoading(true);
         const response = await newsAPI.getNewsByCategory(selectedCategory, currentPage, itemsPerPage);
         if (response.success) {
-          // Handle different response structures
+
           if (response.data.pagination) {
-            // Paginated response from getAllNews
+
             setNews(response.data.news);
             setTotalPages(response.data.pagination.pages);
             setTotalNews(response.data.pagination.total);
           } else if (Array.isArray(response.data)) {
-            // Non-paginated response from getNewsByCategory
+
             setNews(response.data);
             setTotalPages(1);
             setTotalNews(response.data.length);
           } else {
-            // Fallback
+
             setNews(response.data.news || response.data);
             setTotalPages(1);
             setTotalNews(response.data.length);
@@ -63,7 +62,7 @@ const News = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); // Reset to page 1 when changing category
+    setCurrentPage(1); 
     if (category === 'All') {
       setSearchParams({});
     } else {
@@ -87,7 +86,6 @@ const News = () => {
     }
   };
 
-  // Filter news by search query (client-side filtering)
   const filteredNews = news.filter((newsItem) => {
     const matchesSearch =
       searchQuery === '' ||
@@ -96,7 +94,6 @@ const News = () => {
     return matchesSearch;
   });
 
-  // Generate page numbers for pagination
   const generatePageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
@@ -129,7 +126,6 @@ const News = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-b from-dark-50 to-white">
       <div className="container-custom">
-        {/* Page Header */}
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-5xl md:text-6xl font-display font-bold text-dark-900 mb-4">
             All News
@@ -139,10 +135,8 @@ const News = () => {
           </p>
         </div>
 
-        {/* Search and Filter Bar */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-12 animate-slide-up">
           <div className="flex flex-col lg:flex-row gap-4">
-            {/* Search Input */}
             <div className="flex-1 relative">
               <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-dark-400" />
               <input
@@ -154,7 +148,6 @@ const News = () => {
               />
             </div>
 
-            {/* Filter Toggle Button (Mobile) */}
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="lg:hidden btn-secondary flex items-center justify-center space-x-2"
@@ -164,7 +157,6 @@ const News = () => {
             </button>
           </div>
 
-          {/* Category Filters */}
           <div
             className={`mt-6 pt-6 border-t border-dark-100 ${
               showFilters ? 'block' : 'hidden lg:block'
@@ -202,7 +194,6 @@ const News = () => {
           </div>
         </div>
 
-        {/* Results Info */}
         <div className="mb-8 flex items-center justify-between">
           <p className="text-dark-600">
             Showing <span className="font-semibold text-dark-900">{filteredNews.length}</span> of{' '}
@@ -221,7 +212,6 @@ const News = () => {
           )}
         </div>
 
-        {/* News Grid */}
         {loading ? (
           <Loading />
         ) : filteredNews.length > 0 ? (
@@ -238,10 +228,8 @@ const News = () => {
               ))}
             </div>
 
-            {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="mt-12 flex justify-center items-center space-x-2">
-                {/* Previous Button */}
                 <button
                   onClick={handlePrevPage}
                   disabled={currentPage === 1}
@@ -255,7 +243,6 @@ const News = () => {
                   <span>Previous</span>
                 </button>
 
-                {/* Page Numbers */}
                 <div className="hidden sm:flex items-center space-x-2">
                   {generatePageNumbers().map((page, index) => (
                     <button
@@ -275,14 +262,12 @@ const News = () => {
                   ))}
                 </div>
 
-                {/* Mobile Page Indicator */}
                 <div className="sm:hidden px-4 py-2 bg-white rounded-lg shadow-md">
                   <span className="font-medium text-dark-700">
                     {currentPage} / {totalPages}
                   </span>
                 </div>
 
-                {/* Next Button */}
                 <button
                   onClick={handleNextPage}
                   disabled={currentPage === totalPages}

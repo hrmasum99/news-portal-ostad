@@ -39,7 +39,6 @@ const Header = () => {
     >
       <nav className="container-custom">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <Link
             to="/"
             className="flex items-center space-x-2 group"
@@ -54,7 +53,6 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -68,7 +66,6 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Auth Buttons / User Menu */}
           <div className="hidden md:flex items-center space-x-4">
             {isAuthenticated ? (
               <div className="relative">
@@ -84,7 +81,6 @@ const Header = () => {
                   <span className="font-medium text-dark-800">{user?.name}</span>
                 </button>
 
-                {/* Dropdown Menu */}
                 {showUserMenu && (
                   <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl py-2 animate-scale-in border border-dark-100">
                     <Link
@@ -126,7 +122,6 @@ const Header = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={toggleMobileMenu}
             className="md:hidden text-2xl text-dark-800 hover:text-primary-600 transition-colors"
@@ -135,7 +130,6 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 animate-slide-down">
             <div className="flex flex-col space-y-3">

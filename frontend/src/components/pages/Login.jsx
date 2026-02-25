@@ -53,7 +53,6 @@ const Login = () => {
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-br from-primary-50 via-white to-dark-50">
       <div className="container-custom">
         <div className="max-w-md mx-auto">
-          {/* Logo & Title */}
           <div className="text-center mb-8 animate-fade-in">
             <Link to="/" className="inline-flex items-center space-x-2 mb-6">
               <FaNewspaper className="text-4xl text-primary-600" />
@@ -67,15 +66,7 @@ const Login = () => {
             <p className="text-dark-600">Sign in to continue to your account</p>
           </div>
 
-          {/* Login Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8 animate-slide-up">
-            {/* Demo Credentials Notice */}
-            {/* <div className="bg-primary-50 border-l-4 border-primary-600 p-4 mb-6">
-              <p className="text-sm text-dark-700 font-medium mb-2">Demo Credentials:</p>
-              <p className="text-sm text-dark-600">Email: john@example.com</p>
-              <p className="text-sm text-dark-600">Password: password123</p>
-            </div> */}
-
             {error && (
               <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 animate-slide-down">
                 <p className="text-red-700">{error}</p>
@@ -83,7 +74,6 @@ const Login = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Input */}
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-dark-700 mb-2">
                   Email Address
@@ -103,7 +93,6 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* Password Input */}
               <div>
                 <label htmlFor="password" className="block text-sm font-semibold text-dark-700 mb-2">
                   Password
@@ -123,7 +112,6 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* Remember Me & Forgot Password */}
               <div className="flex items-center justify-between">
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
@@ -140,7 +128,6 @@ const Login = () => {
                 </Link>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -150,7 +137,6 @@ const Login = () => {
               </button>
             </form>
 
-            {/* Divider */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-dark-200"></div>
@@ -160,7 +146,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Social Login */}
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-dark-200 rounded-lg hover:bg-dark-50 transition-colors">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -191,7 +176,6 @@ const Login = () => {
               </button>
             </div>
 
-            {/* Sign Up Link */}
             <p className="mt-8 text-center text-dark-600">
               Don't have an account?{' '}
               <Link to="/register" className="text-primary-600 hover:text-primary-700 font-semibold">
