@@ -143,49 +143,34 @@ const Home = () => {
       {/* Top News Section */}
       <section className="py-20 bg-white">
         <div className="container-custom">
-          <div className="flex items-center space-x-3 mb-12">
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-900">Top Stories</h2>
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <div className="flex items-center space-x-3 mb-3">
+                <FaFire className="text-3xl text-primary-600" />
+                <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-900">
+                  Top News
+                </h2>
+              </div>
+              <p className="text-dark-600 text-lg">
+                The most popular and trending articles right now
+              </p>
+            </div>
+            <Link
+              to="/news"
+              className="hidden md:flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-semibold group"
+            >
+              <span>View All</span>
+              <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Perfect 3x2 Symmetrical Grid (All 6 items same size) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {topNews.slice(0, 6).map((newsItem) => (
+              <NewsCard key={newsItem._id} news={newsItem} />
+            ))}
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <div className="flex flex-col gap-8">
-
-              {gridNews[0] && (
-                <div className="h-[550px]">
-                  <NewsCard news={gridNews[0]} featured={true} />
-                </div>
-              )}
-              
-              {gridNews[1] && (
-                <NewsCard news={gridNews[1]} />
-              )}
-              
-              {gridNews[2] && (
-                <div className="h-[200px] overflow-hidden rounded-2xl group border border-dark-100">
-
-                  <div className="transform scale-95 origin-top">
-                      <NewsCard news={gridNews[2]} />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-8">
-              {gridNews.slice(3, 5).map((newsItem) => (
-                <div key={newsItem._id}>
-                  <NewsCard news={newsItem} />
-                </div>
-              ))}
-              
-              <div className="bg-primary-50 rounded-2xl p-8 flex flex-col justify-center items-center text-center border-2 border-dashed border-primary-200">
-                <h3 className="text-xl font-bold text-primary-900 mb-2">Want to see more?</h3>
-                <p className="text-primary-700 mb-4">Explore all our latest trending stories.</p>
-                <Link to="/news" className="btn-primary py-2 px-6">View All</Link>
-              </div>
-            </div>
-
-          </div>
         </div>
       </section>
 
