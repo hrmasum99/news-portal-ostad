@@ -70,11 +70,11 @@ const Login = () => {
           {/* Login Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8 animate-slide-up">
             {/* Demo Credentials Notice */}
-            <div className="bg-primary-50 border-l-4 border-primary-600 p-4 mb-6">
+            {/* <div className="bg-primary-50 border-l-4 border-primary-600 p-4 mb-6">
               <p className="text-sm text-dark-700 font-medium mb-2">Demo Credentials:</p>
               <p className="text-sm text-dark-600">Email: john@example.com</p>
               <p className="text-sm text-dark-600">Password: password123</p>
-            </div>
+            </div> */}
 
             {error && (
               <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 animate-slide-down">
