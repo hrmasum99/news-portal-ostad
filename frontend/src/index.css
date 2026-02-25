@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #fef2f2;
+  --color-primary-100: #fee2e2;
+  --color-primary-200: #fecaca;
+  --color-primary-500: #ef4444;
+  --color-primary-600: #dc2626;
+  --color-primary-700: #b91c1c;
+
+  /* Dark/Neutral Colors */
+  --color-dark-50: #f9fafb;
+  --color-dark-100: #f3f4f6;
+  --color-dark-200: #e5e7eb;
+  --color-dark-300: #d1d5db;
+  --color-dark-400: #9ca3af;
+  --color-dark-500: #6b7280;
+  --color-dark-600: #4b5563;
+  --color-dark-700: #374151;
+  --color-dark-800: #1f2937;
+  --color-dark-900: #111827;
+
+  /* Fonts */
+  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-dark-900 font-body antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white px-6 py-3 rounded-lg font-medium 
+           hover:bg-primary-700 transition-all duration-300 
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-100 text-dark-900 px-6 py-3 rounded-lg font-medium 
+           hover:bg-dark-200 transition-all duration-300 
+           focus:outline-none focus:ring-2 focus:ring-dark-400 focus:ring-offset-2
+           active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-dark-900 text-dark-900 px-6 py-3 rounded-lg font-medium 
+           hover:bg-dark-900 hover:text-white transition-all duration-300 
+           focus:outline-none focus:ring-2 focus:ring-dark-500 focus:ring-offset-2
+           active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border-2 border-dark-200 rounded-lg 
+           focus:border-primary-500 focus:ring-2 focus:ring-primary-200 
+           transition-all duration-300 outline-none;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-lg hover:shadow-2xl 
+           transition-all duration-300 overflow-hidden;
+  }
+
+  .badge {
+    @apply inline-block px-3 py-1 text-xs font-semibold rounded-full;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 0.6s;
+  }
+
+  .animation-delay-800 {
+    animation-delay: 0.8s;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-dark-500;
+}
+
+/* Custom selection */
+::selection {
+  @apply bg-primary-500 text-white;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #ef4444;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
