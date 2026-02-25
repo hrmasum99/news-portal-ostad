@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FaFilter, FaSearch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { useNewsStore } from "../../store";
+import { useAuthStore, useNewsStore } from "../../store";
 import { newsAPI } from '../../services/api';
 import NewsCard from '../common/NewsCard';
 import Loading from '../common/Loading';

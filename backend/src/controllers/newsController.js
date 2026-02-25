@@ -39,6 +39,20 @@ exports.getTopNews = async (req, res) => {
 
 exports.getNewsById = async (req, res) => {
   try {
+    const news = await News.findById(req.params.id).populate('author', 'name avatar');
+    
+    if (!news) {
+      return res.status(404).json({ success: false, message: 'News not found' });
+    }
+    
+    res.json({ success: true, data: news });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getNewsByCategory = async (req, res) => {
+  try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const startIndex = (page - 1) * limit;
@@ -57,16 +71,6 @@ exports.getNewsById = async (req, res) => {
         pagination: { total, page, pages: Math.ceil(total / limit) } 
       } 
     });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-exports.getNewsByCategory = async (req, res) => {
-  try {
-    const news = await News.find({ category: req.params.category, published: true })
-      .populate('author', 'name avatar').sort('-createdAt');
-    res.json({ success: true, data: news });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

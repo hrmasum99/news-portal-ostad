@@ -12,8 +12,8 @@ import {
   FaEdit,
   FaTrash,
 } from 'react-icons/fa';
-import { useAuthStore } from "../../store";
-import { newsAPI, formatDate, getReadingTime } from "../../services/api";
+import { useAuthStore, useNewsStore } from "../../store";
+import { newsAPI, formatDate, getReadingTime } from '../../services/api';
 import Loading from '../common/Loading';
 import NewsCard from '../common/NewsCard';
 
@@ -35,9 +35,19 @@ const NewsDetail = () => {
         const response = await newsAPI.getNewsById(id);
         if (response.success) {
           setNews(response.data);
+          
+          // Fetch related news from same category
           const allNewsRes = await newsAPI.getNewsByCategory(response.data.category);
           if (allNewsRes.success) {
-            const related = allNewsRes.data
+            // Handle different response structures
+            let newsArray = [];
+            if (Array.isArray(allNewsRes.data)) {
+              newsArray = allNewsRes.data;
+            } else if (allNewsRes.data.news) {
+              newsArray = allNewsRes.data.news;
+            }
+            
+            const related = newsArray
               .filter((item) => item._id !== id)
               .slice(0, 3);
             setRelatedNews(related);
@@ -63,6 +73,7 @@ const NewsDetail = () => {
       return;
     }
     setLiked(!liked);
+    // In real app, this would call API to update likes
   };
 
   const handleDelete = async () => {
@@ -88,10 +99,11 @@ const NewsDetail = () => {
   if (loading) return <Loading fullScreen />;
   if (!news) return null;
 
-  const isAuthor = isAuthenticated && user?._id === news.author._id;
+  const isAuthor = isAuthenticated && user?._id === news.author?._id;
 
   return (
     <div className="min-h-screen pt-24 pb-12 bg-white">
+      {/* Back Button */}
       <div className="container-custom mb-8">
         <button
           onClick={() => navigate(-1)}
@@ -102,7 +114,9 @@ const NewsDetail = () => {
         </button>
       </div>
 
+      {/* Article Header */}
       <article className="container-custom max-w-4xl">
+        {/* Category & Edit/Delete */}
         <div className="flex items-center justify-between mb-6">
           <Link
             to={`/news?category=${news.category}`}
@@ -131,22 +145,26 @@ const NewsDetail = () => {
           )}
         </div>
 
+        {/* Title */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-dark-900 mb-6 leading-tight animate-slide-up">
           {news.title}
         </h1>
 
+        {/* Meta Information */}
         <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-dark-200 mb-8 animate-slide-up animation-delay-200">
-          <div className="flex items-center space-x-3">
-            <img
-              src={news.author.avatar}
-              alt={news.author.name}
-              className="w-12 h-12 rounded-full border-2 border-primary-500"
-            />
-            <div>
-              <p className="font-semibold text-dark-900">{news.author.name}</p>
-              <p className="text-sm text-dark-500">{news.author.bio}</p>
+          {news.author && (
+            <div className="flex items-center space-x-3">
+              <img
+                src={news.author.avatar || 'https://i.pravatar.cc/150?img=1'}
+                alt={news.author.name || 'Author'}
+                className="w-12 h-12 rounded-full border-2 border-primary-500"
+              />
+              <div>
+                <p className="font-semibold text-dark-900">{news.author.name || 'Anonymous'}</p>
+                {news.author.bio && <p className="text-sm text-dark-500">{news.author.bio}</p>}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex items-center space-x-1 text-dark-600">
             <FaClock />
@@ -154,15 +172,16 @@ const NewsDetail = () => {
           </div>
 
           <div className="flex items-center space-x-1 text-dark-600">
-            <span>{getReadingTime(news.content)}</span>
+            <span>{getReadingTime(news?.content || '')}</span>
           </div>
 
           <div className="flex items-center space-x-1 text-dark-600">
             <FaEye />
-            <span>{news.views.toLocaleString()} views</span>
+            <span>{news.views?.toLocaleString() || 0} views</span>
           </div>
         </div>
 
+        {/* Featured Image */}
         <div className="relative w-full h-96 md:h-[500px] rounded-2xl overflow-hidden mb-12 animate-scale-in">
           <img
             src={news.image}
@@ -171,14 +190,16 @@ const NewsDetail = () => {
           />
         </div>
 
+        {/* Article Content */}
         <div className="prose prose-lg max-w-none mb-12">
-          {news.content.split('\n\n').map((paragraph, index) => (
+          {(news?.content || '').split('\n\n').map((paragraph, index) => (
             <p key={index} className="text-dark-700 leading-relaxed mb-6 text-lg">
               {paragraph}
             </p>
           ))}
         </div>
 
+        {/* Tags */}
         {news.tags && news.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             {news.tags.map((tag) => (
@@ -192,6 +213,7 @@ const NewsDetail = () => {
           </div>
         )}
 
+        {/* Interaction Buttons */}
         <div className="flex items-center justify-between py-8 border-y border-dark-200">
           <button
             onClick={handleLike}
@@ -202,7 +224,7 @@ const NewsDetail = () => {
             }`}
           >
             <FaHeart />
-            <span>{news.likes + (liked ? 1 : 0)} Likes</span>
+            <span>{(news.likes || 0) + (liked ? 1 : 0)} Likes</span>
           </button>
 
           <div className="relative">
@@ -246,6 +268,7 @@ const NewsDetail = () => {
         </div>
       </article>
 
+      {/* Related News */}
       {relatedNews.length > 0 && (
         <section className="container-custom mt-20">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-dark-900 mb-8">
