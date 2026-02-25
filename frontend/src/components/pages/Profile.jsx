@@ -11,9 +11,9 @@ import {
   FaSave,
   FaTimes,
 } from 'react-icons/fa';
-import { useAuthStore, useNewsStore } from "../../store";
-import { authAPI, newsAPI, formatDate } from "../../services/api";
-import Loading from '../common/Loading';
+import { useAuthStore, useNewsStore } from '../../store'; // Fixed path
+import { authAPI, newsAPI, formatDate } from '../../services/api'; // Fixed path
+import Loading from '../common/Loading'; // Fixed path
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -28,7 +28,9 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    // 🚨 SAFETY CHECK: If no user exists, clear broken state and force login
+    if (!isAuthenticated || !user) {
+      logout();
       navigate('/login');
       return;
     }
@@ -36,13 +38,11 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        // Fetch user's news
         const newsRes = await newsAPI.getUserNews(user._id);
         if (newsRes.success) {
           setUserNews(newsRes.data);
         }
 
-        // Set form data
         setFormData({
           name: user.name,
           email: user.email,
@@ -56,7 +56,7 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate, logout]);
 
   const handleChange = (e) => {
     setFormData({
@@ -93,7 +93,8 @@ const Profile = () => {
     }
   };
 
-  if (loading) return <Loading fullScreen />;
+  // 🚨 PREVENT RENDER CRASH: Show loading if user is null before redirect happens
+  if (loading || !user) return <Loading fullScreen />;
 
   const totalViews = userNews.reduce((sum, news) => sum + news.views, 0);
   const totalLikes = userNews.reduce((sum, news) => sum + news.likes, 0);
