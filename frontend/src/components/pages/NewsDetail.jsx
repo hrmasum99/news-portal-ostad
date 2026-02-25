@@ -28,13 +28,28 @@ const NewsDetail = () => {
 
   const { isAuthenticated, user } = useAuthStore();
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchNewsDetail = async () => {
       try {
         setLoading(true);
         const response = await newsAPI.getNewsById(id);
+        
         if (response.success) {
-          setNews(response.data);
+          let actualNews = response.data;
+          if (Array.isArray(actualNews)) actualNews = actualNews[0];
+          else if (actualNews?.news) actualNews = actualNews.news;
+          
+          setNews(actualNews);
+
+          const viewedKey = `viewed_${id}`;
+          if (!sessionStorage.getItem(viewedKey)) {
+            sessionStorage.setItem(viewedKey, 'true'); 
+            await newsAPI.incrementView(id);           
+          }
+
+          if (actualNews?.likes?.includes(user?._id)) {
+            setLiked(true);
+          }
           
           // Fetch related news from same category
           const allNewsRes = await newsAPI.getNewsByCategory(response.data.category);
@@ -67,13 +82,22 @@ const NewsDetail = () => {
     window.scrollTo(0, 0);
   }, [id, navigate]);
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
     setLiked(!liked);
-    // In real app, this would call API to update likes
+    try {
+      const response = await newsAPI.toggleLike(id);
+      if (!response.success) {
+        setLiked(liked);
+        console.error('Failed to save like');
+      }
+    } catch (error) {
+      setLiked(liked);
+      console.error('Error liking news:', error);
+    }
   };
 
   const handleDelete = async () => {
@@ -224,7 +248,7 @@ const NewsDetail = () => {
             }`}
           >
             <FaHeart />
-            <span>{(news.likes || 0) + (liked ? 1 : 0)} Likes</span>
+            <span>{(news?.likes?.length || 0) + (liked ? 1 : 0)} Likes</span>
           </button>
 
           <div className="relative">

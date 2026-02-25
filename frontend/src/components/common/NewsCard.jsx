@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { FaClock, FaEye, FaHeart, FaUser } from 'react-icons/fa';
+import { useAuthStore } from '../../store';
 import { formatDate, getReadingTime, truncateText } from '../../services/api';
 
 const NewsCard = ({ news, featured = false }) => {
+  const { user } = useAuthStore();
+  const isLikedByMe = user && news?.likes?.includes(user._id);
   if (featured) {
     return (
       <Link
@@ -112,8 +115,8 @@ const NewsCard = ({ news, featured = false }) => {
               <span>{news.views}</span>
             </div>
             <div className="flex items-center space-x-1">
-              <FaHeart />
-              <span>{news.likes}</span>
+              <FaHeart className={isLikedByMe ? "text-red-500" : "text-dark-400"}/>
+              <span>{news?.likes?.length || 0}</span>
             </div>
           </div>
         </div>

@@ -18,8 +18,8 @@ const Home = () => {
       try {
         setLoading(true);
         const [topNewsRes, allNewsRes] = await Promise.all([
-          newsAPI.getTopNews(6),
-          newsAPI.getAllNews(1, 6), // First page, 6 items for latest news
+          newsAPI.getTopNews(7),
+          newsAPI.getAllNews(1, 6), 
         ]);
 
         if (topNewsRes.success) {
@@ -78,7 +78,7 @@ const Home = () => {
   if (loading) return <Loading fullScreen />;
 
   const heroNews = topNews[0];
-  const featuredNews = topNews.slice(1, 4);
+  const gridNews = topNews.slice(1, 6);
   const latestNews = latestNewsData;
   const trendingNews = news.filter(n => n.views > 2000).slice(0, 4);
 
@@ -141,48 +141,54 @@ const Home = () => {
       </section>
 
       {/* Top News Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-dark-50">
+      <section className="py-20 bg-white">
         <div className="container-custom">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <div className="flex items-center space-x-3 mb-3">
-                <FaFire className="text-3xl text-primary-600" />
-                <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-900">
-                  Top Stories
-                </h2>
-              </div>
-              <p className="text-dark-600 text-lg">
-                Don't miss these trending articles
-              </p>
-            </div>
-            <Link
-              to="/news"
-              className="hidden md:flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-semibold group"
-            >
-              <span>View All</span>
-              <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+          <div className="flex items-center space-x-3 mb-12">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-dark-900">Top Stories</h2>
           </div>
-
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Large Featured */}
-            {featuredNews[0] && (
-              <div className="lg:row-span-2">
-                <NewsCard news={featuredNews[0]} featured />
-              </div>
-            )}
+            
+            <div className="flex flex-col gap-8">
 
-            {/* Smaller Featured */}
-            <div className="grid gap-8">
-              {featuredNews.slice(1).map((newsItem) => (
-                <NewsCard key={newsItem._id} news={newsItem} />
-              ))}
+              {gridNews[0] && (
+                <div className="h-[550px]">
+                  <NewsCard news={gridNews[0]} featured={true} />
+                </div>
+              )}
+              
+              {gridNews[1] && (
+                <NewsCard news={gridNews[1]} />
+              )}
+              
+              {gridNews[2] && (
+                <div className="h-[200px] overflow-hidden rounded-2xl group border border-dark-100">
+
+                  <div className="transform scale-95 origin-top">
+                      <NewsCard news={gridNews[2]} />
+                  </div>
+                </div>
+              )}
             </div>
+
+            <div className="flex flex-col gap-8">
+              {gridNews.slice(3, 5).map((newsItem) => (
+                <div key={newsItem._id}>
+                  <NewsCard news={newsItem} />
+                </div>
+              ))}
+              
+              <div className="bg-primary-50 rounded-2xl p-8 flex flex-col justify-center items-center text-center border-2 border-dashed border-primary-200">
+                <h3 className="text-xl font-bold text-primary-900 mb-2">Want to see more?</h3>
+                <p className="text-primary-700 mb-4">Explore all our latest trending stories.</p>
+                <Link to="/news" className="btn-primary py-2 px-6">View All</Link>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
       <section className="py-20 bg-dark-900 text-white">
         <div className="container-custom">
           <div className="text-center mb-12">
@@ -234,43 +240,6 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Pagination for Latest News */}
-          {latestNewsTotalPages > 1 && (
-            <div className="mt-12 flex justify-center items-center space-x-4">
-              <button
-                onClick={handleLatestNewsPrev}
-                disabled={latestNewsPage === 1}
-                className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2 ${
-                  latestNewsPage === 1
-                    ? 'bg-dark-100 text-dark-400 cursor-not-allowed'
-                    : 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                <FaChevronLeft />
-                <span className="hidden sm:inline">Previous</span>
-              </button>
-
-              <div className="flex items-center space-x-2">
-                <span className="px-4 py-2 bg-dark-100 rounded-lg font-medium text-dark-700">
-                  Page {latestNewsPage} of {latestNewsTotalPages}
-                </span>
-              </div>
-
-              <button
-                onClick={handleLatestNewsNext}
-                disabled={latestNewsPage === latestNewsTotalPages}
-                className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2 ${
-                  latestNewsPage === latestNewsTotalPages
-                    ? 'bg-dark-100 text-dark-400 cursor-not-allowed'
-                    : 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg hover:shadow-xl'
-                }`}
-              >
-                <span className="hidden sm:inline">Next</span>
-                <FaChevronRight />
-              </button>
-            </div>
-          )}
-
           <div className="text-center mt-12">
             <Link to="/news" className="btn-primary text-lg px-8 py-4 inline-flex items-center space-x-2">
               <span>View All News</span>
@@ -315,7 +284,7 @@ const Home = () => {
                   <div className="flex items-center space-x-4 mt-3 text-xs text-dark-500">
                     <span>{newsItem.views.toLocaleString()} views</span>
                     <span>•</span>
-                    <span>{newsItem.likes} likes</span>
+                    <span>{newsItem?.likes?.length || 0} likes</span>
                   </div>
                 </div>
               </Link>

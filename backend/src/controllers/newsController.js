@@ -29,9 +29,15 @@ exports.getAllNews = async (req, res) => {
 exports.getTopNews = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
-    const news = await News.find({ published: true, featured: true })
-      .populate('author', 'name avatar').sort('-views').limit(limit);
-    res.json({ success: true, data: news });
+   let news = await News.find({ published: true, featured: true })
+      .populate('author', 'name avatar');
+    news.sort((a, b) => {
+      const scoreA = (a.views || 0) + ((a.likes?.length || 0) * 5);
+      const scoreB = (b.views || 0) + ((b.likes?.length || 0) * 5);
+      return scoreB - scoreA;
+    });
+
+    res.json({ success: true, data: news.slice(0, limit) });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

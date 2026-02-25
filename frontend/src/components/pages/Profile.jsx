@@ -97,7 +97,7 @@ const Profile = () => {
   if (loading || !user) return <Loading fullScreen />;
 
   const totalViews = userNews.reduce((sum, news) => sum + news.views, 0);
-  const totalLikes = userNews.reduce((sum, news) => sum + news.likes, 0);
+  const totalLikes = userNews.reduce((sum, news) => sum + (news?.likes?.length || 0), 0);
 
   return (
     <div className="min-h-screen pt-24 pb-12 bg-gradient-to-b from-dark-50 to-white">
